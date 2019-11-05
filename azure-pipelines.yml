@@ -2,9 +2,8 @@ trigger:
   batch: true
   branches:
     include:
-    - "*"
+      - "*"
 pr: none
-
 pool:
   vmImage: 'Ubuntu-16.04'
 
@@ -13,7 +12,7 @@ steps:
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
   inputs:
     Contents: |
-     azure/**
+    azure/**
     TargetFolder: '$(build.artifactstagingdirectory)'
     OverWrite: true
 - task: PublishBuildArtifacts@1
