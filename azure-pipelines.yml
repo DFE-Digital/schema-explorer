@@ -5,6 +5,9 @@ trigger:
     - "*"
 pr: none
 
+pool:
+  vmImage: 'Ubuntu-16.04'
+
 steps:
 - task: CopyFiles@2
   displayName: 'Copy Files to: $(build.artifactstagingdirectory)'
