@@ -99,31 +99,25 @@
       "type": "int",
       "defaultValue": 1
     },
-    "containerCPUCores": {
+    "databaseResourceGroup": {
       "type": "string",
-      "defaultValue": "1",
       "metadata": {
-        "description": "The number of CPU cores for Azure Container Instance."
+        "description": "The name of the DB server resource group."
       }
     },
-    "containerMemory": {
+    "databaseServerName": {
       "type": "string",
-      "defaultValue": "1.5",
       "metadata": {
-        "description": "The number of memory in GB for Azure Container Instance."
+        "description": "The name of the DB server."
       }
     }
   },
   "variables": {
     "deploymentUrlBase": "https://raw.githubusercontent.com/DFE-Digital/bat-platform-building-blocks/master/templates/",
-    "deploymentUrlBaseDas": "https://raw.githubusercontent.com/SkillsFundingAgency/das-platform-building-blocks/master/templates/",
     "resourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('serviceName')))]",
     "keyvaultCertificateName": "[if(greater(length(parameters('certificateName')),0), parameters('certificateName'), replace(parameters('customHostName'), '.', '-'))]",
     "appServiceName": "[concat(variables('resourceNamePrefix'), '-as')]",
-    "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]",
-    "databaseResourceNamePrefix": "[toLower(concat(parameters('resourceEnvironmentName'),'-', parameters('databaseServiceName')))]",
-    "databaseServerName": "[concat(variables('databaseResourceNamePrefix'), '-psql')]",
-    "databaseResourceGroup": "[concat(variables('databaseResourceNamePrefix'), '-rg')]"
+    "appServicePlanName": "[concat(variables('resourceNamePrefix'), '-asp')]"
   },
   "resources": [
     {
@@ -272,7 +266,7 @@
       "apiVersion": "2017-05-10",
       "name": "schema-explorer-postgresql-server-firewall-rules",
       "type": "Microsoft.Resources/deployments",
-      "resourceGroup": "[variables('databaseResourceGroup')]",
+      "resourceGroup": "[parameters('databaseResourceGroup')]",
       "properties": {
         "mode": "Incremental",
         "templateLink": {
@@ -287,11 +281,12 @@
             "value": "[reference('app-service').outputs.possibleOutboundIpAddresses.value]"
           },
           "serverName": {
-            "value": "[variables('databaseServerName')]"
+            "value": "[parameters('databaseServerName')]"
           }
         }
       },
-      "dependsOn": []
+      "dependsOn": [
+      ]
     },
     {
       "apiVersion": "2017-05-10",
